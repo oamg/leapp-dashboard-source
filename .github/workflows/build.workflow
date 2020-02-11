@@ -1,0 +1,3 @@
+action "build" {
+  needs = "build"
+}
