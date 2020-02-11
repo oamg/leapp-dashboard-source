@@ -3,7 +3,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - uses: borales/actions-yarn@v2.0.0
         with:
@@ -11,3 +11,21 @@ jobs:
       - uses: borales/actions-yarn@v2.0.0
         with:
           cmd: build
+      - name: Update files
+        run: |
+          mkdir ${HOME}/.ssh
+          echo "${{ secrets.SECRET_PRIVATE_DEPLOY_KEY }}" > ${HOME}/.ssh/id_rsa
+          chmod 600 ${HOME}/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com
+          git clone git@github.com:oamg/leapp-dashboard ${HOME}/dashboard-target
+          pushd ${HOME}/dashboard-target
+          git rm -f static/js/*
+          popd
+          cp -a build/* ${HOME}/dashboard-target
+          pushd ${HOME}/dashboard-target
+          git config user.name "Build updater bot"
+          git config user.email "oamg-bot@example.com"
+          git add .
+          git commit -sm "Updated to build ${GITHUB_SHA}"
+          git push
+          popd
