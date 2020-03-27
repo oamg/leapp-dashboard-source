@@ -19,11 +19,17 @@ class DiscoverProvider extends React.Component {
 
   constructor(props) {
     super(props);
-    axios.get('/api/discover', {maxRedirects: 0}).then(this.refreshData).catch(() => {
-        axios.get('/githubio-data/files/discover.json', {maxRedirects: 0}).then(this.refreshData).catch(() => {
-	        axios.get('api/discover.json').then(this.refreshData);
-        });
-    });
+    axios
+      .get('/api/discover', { maxRedirects: 0 })
+      .then(this.refreshData)
+      .catch(() => {
+        axios
+          .get('/githubio-data/files/discover.json', { maxRedirects: 0 })
+          .then(this.refreshData)
+          .catch(() => {
+            axios.get('api/discover.json').then(this.refreshData);
+          });
+      });
   }
 
   render() {

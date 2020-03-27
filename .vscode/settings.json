@@ -1,7 +1,9 @@
-
 {
   "editor.formatOnSave": true,
-  "prettier.eslintIntegration": true,
   "prettier.singleQuote": true,
-  "prettier.trailingComma": "none"
+  "prettier.trailingComma": "none",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
