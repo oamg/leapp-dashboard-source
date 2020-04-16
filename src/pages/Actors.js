@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  Button,
-  Grid,
-  ListView,
-  Toolbar,
-  Filter,
-  TypeAheadSelect
-} from 'patternfly-react';
+import { Button, Grid, ListView, Toolbar, Filter, TypeAheadSelect } from 'patternfly-react';
 import DiscoverContext from '../DiscoverContext';
 
 // import { EmptyStateComponent } from '../components/EmptyStateComponent';
@@ -89,25 +82,15 @@ class ActorsPage extends Component {
       const lowerCurrentFilterValue = filter.value.toLowerCase();
       switch (filter.type) {
         case 'Tag':
-          return !item.tags.some(e =>
-            e.toLowerCase().includes(lowerCurrentFilterValue)
-          );
+          return !item.tags.some(e => e.toLowerCase().includes(lowerCurrentFilterValue));
         case 'Consumes':
-          return !item.consumes.some(e =>
-            e.toLowerCase().includes(lowerCurrentFilterValue)
-          );
+          return !item.consumes.some(e => e.toLowerCase().includes(lowerCurrentFilterValue));
         case 'Produces':
-          return !item.produces.some(e =>
-            e.toLowerCase().includes(lowerCurrentFilterValue)
-          );
+          return !item.produces.some(e => e.toLowerCase().includes(lowerCurrentFilterValue));
         case 'Model':
           return !(
-            item.produces.some(e =>
-              e.toLowerCase().includes(lowerCurrentFilterValue)
-            ) ||
-            item.consumes.some(e =>
-              e.toLowerCase().includes(lowerCurrentFilterValue)
-            )
+            item.produces.some(e => e.toLowerCase().includes(lowerCurrentFilterValue)) ||
+            item.consumes.some(e => e.toLowerCase().includes(lowerCurrentFilterValue))
           );
         case 'Name':
           return !(
@@ -189,9 +172,7 @@ class ActorsPage extends Component {
       case 'Consumes':
         return [...new Set(actors.map(e => e.consumes).flat())].sort();
       case 'Model':
-        return [
-          ...new Set(actors.map(e => e.consumes.concat(e.produces)).flat())
-        ].sort();
+        return [...new Set(actors.map(e => e.consumes.concat(e.produces)).flat())].sort();
       default:
         break;
     }
@@ -266,32 +247,27 @@ class ActorsPage extends Component {
               onChange={this.onTypeAheadChanged}
             />
           </Filter>
-          {activeFilters &&
-            activeFilters.length > 0 && (
-              <Toolbar.Results>
-                <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
-                <Filter.List>
-                  {activeFilters.map((item, index) => (
-                    <Filter.Item
-                      key={index}
-                      onRemove={this.removeFilter}
-                      filterData={item}
-                    >
-                      {item.text}
-                    </Filter.Item>
-                  ))}
-                </Filter.List>
-                <Button
-                  bsStyle="link"
-                  onClick={e => {
-                    e.preventDefault();
-                    this.clearFilters();
-                  }}
-                >
-                  Clear All Filters
-                </Button>
-              </Toolbar.Results>
-            )}{' '}
+          {activeFilters && activeFilters.length > 0 && (
+            <Toolbar.Results>
+              <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
+              <Filter.List>
+                {activeFilters.map((item, index) => (
+                  <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
+                    {item.text}
+                  </Filter.Item>
+                ))}
+              </Filter.List>
+              <Button
+                bsStyle="link"
+                onClick={e => {
+                  e.preventDefault();
+                  this.clearFilters();
+                }}
+              >
+                Clear All Filters
+              </Button>
+            </Toolbar.Results>
+          )}{' '}
         </Toolbar>
         <ListView>{actors.map(this.renderItem.bind(this))}</ListView>
       </Grid>
@@ -300,11 +276,7 @@ class ActorsPage extends Component {
 }
 
 function ActorsPageWithContext() {
-  return (
-    <DiscoverContext.Consumer>
-      {context => <ActorsPage discover={context} />}
-    </DiscoverContext.Consumer>
-  );
+  return <DiscoverContext.Consumer>{context => <ActorsPage discover={context} />}</DiscoverContext.Consumer>;
 }
 
 export default ActorsPageWithContext;

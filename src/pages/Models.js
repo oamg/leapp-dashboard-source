@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  Button,
-  Grid,
-  ListView,
-  Toolbar,
-  Filter,
-  TypeAheadSelect,
-  Form
-} from 'patternfly-react';
+import { Button, Grid, ListView, Toolbar, Filter, TypeAheadSelect, Form } from 'patternfly-react';
 import DiscoverContext from '../DiscoverContext';
 // import { EmptyStateComponent } from '../components/EmptyStateComponent';
 
@@ -56,11 +48,7 @@ class ModelsPage extends Component {
   }
 
   renderAdditionalInfoExpandItems(item) {
-    return (
-      <React.Fragment key="extra">
-        {this.renderDescription(item)}
-      </React.Fragment>
-    );
+    return <React.Fragment key="extra">{this.renderDescription(item)}</React.Fragment>;
   }
 
   isFiltered = item => {
@@ -79,9 +67,7 @@ class ModelsPage extends Component {
           }
           break;
         case 'Name':
-          return !item.class_name
-            .toLowerCase()
-            .includes(lowerCurrentFilterValue);
+          return !item.class_name.toLowerCase().includes(lowerCurrentFilterValue);
         default:
           break;
       }
@@ -120,11 +106,7 @@ class ModelsPage extends Component {
                   {item.actors.map(actor =>
                     actor.consumes
                       .filter(e => item.class_name === e)
-                      .map(e => (
-                        <li key={`produced-${actor.class_name}-${e}`}>
-                          {actor.class_name}
-                        </li>
-                      ))
+                      .map(e => <li key={`produced-${actor.class_name}-${e}`}>{actor.class_name}</li>)
                   )}
                 </ul>
               </Grid.Col>
@@ -134,11 +116,7 @@ class ModelsPage extends Component {
                   {item.actors.map(actor =>
                     actor.produces
                       .filter(e => item.class_name === e)
-                      .map(e => (
-                        <li key={`produced-${actor.class_name}-${e}`}>
-                          {actor.class_name}
-                        </li>
-                      ))
+                      .map(e => <li key={`produced-${actor.class_name}-${e}`}>{actor.class_name}</li>)
                   )}
                 </ul>
               </Grid.Col>
@@ -217,9 +195,7 @@ class ModelsPage extends Component {
       return (
         <Form.FormGroup>
           <Form.Checkbox
-            checked={
-              activeFilters.findIndex(e => e.type === currentFilterType) !== -1
-            }
+            checked={activeFilters.findIndex(e => e.type === currentFilterType) !== -1}
             onChange={e => {
               const { checked } = e.target;
               this.removeFilterMessageOnly(() => {
@@ -264,32 +240,27 @@ class ModelsPage extends Component {
           />
           {this.conditionalFilter(models)}
         </Filter>
-        {activeFilters &&
-          activeFilters.length > 0 && (
-            <Toolbar.Results>
-              <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
-              <Filter.List>
-                {activeFilters.map((item, index) => (
-                  <Filter.Item
-                    key={index}
-                    onRemove={this.removeFilter}
-                    filterData={item}
-                  >
-                    {item.text}
-                  </Filter.Item>
-                ))}
-              </Filter.List>
-              <Button
-                bsStyle="link"
-                onClick={e => {
-                  e.preventDefault();
-                  this.clearFilters();
-                }}
-              >
-                Clear All Filters
-              </Button>
-            </Toolbar.Results>
-          )}{' '}
+        {activeFilters && activeFilters.length > 0 && (
+          <Toolbar.Results>
+            <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
+            <Filter.List>
+              {activeFilters.map((item, index) => (
+                <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
+                  {item.text}
+                </Filter.Item>
+              ))}
+            </Filter.List>
+            <Button
+              bsStyle="link"
+              onClick={e => {
+                e.preventDefault();
+                this.clearFilters();
+              }}
+            >
+              Clear All Filters
+            </Button>
+          </Toolbar.Results>
+        )}{' '}
       </Toolbar>
     );
   };
@@ -301,19 +272,14 @@ class ModelsPage extends Component {
       .flat();
     const actors = this.props.discover.map(repo => repo.actors).flat();
     // eslint-disable-next-line prefer-const
-    let lookup = Object.assign(
-      {},
-      ...allModels.map(m => ({ [m.class_name]: [] }))
-    );
+    let lookup = Object.assign({}, ...allModels.map(m => ({ [m.class_name]: [] })));
     actors.forEach(a => {
       a.produces.forEach(m => {
         lookup[m].push(a);
       });
       a.consumes.forEach(m => lookup[m].push(a));
     });
-    const models = allModels.map(m =>
-      Object.assign(m, { actors: lookup[m.class_name] })
-    );
+    const models = allModels.map(m => Object.assign(m, { actors: lookup[m.class_name] }));
 
     return (
       <Grid fluid className="container-pf-nav-pf-vertical">
@@ -325,11 +291,7 @@ class ModelsPage extends Component {
 }
 
 function ModelsPageWithContext() {
-  return (
-    <DiscoverContext.Consumer>
-      {context => <ModelsPage discover={context} />}
-    </DiscoverContext.Consumer>
-  );
+  return <DiscoverContext.Consumer>{context => <ModelsPage discover={context} />}</DiscoverContext.Consumer>;
 }
 
 export default ModelsPageWithContext;

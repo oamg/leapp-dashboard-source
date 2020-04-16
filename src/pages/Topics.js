@@ -1,15 +1,8 @@
 import React, { Component } from 'react';
+import { Button, Grid, ListView, Toolbar, Filter, TypeAheadSelect } from 'patternfly-react';
 import PropTypes from 'prop-types';
-import DiscoverContext from '../DiscoverContext';
 
-import {
-  Button,
-  Grid,
-  ListView,
-  Toolbar,
-  Filter,
-  TypeAheadSelect
-} from 'patternfly-react';
+import DiscoverContext from '../DiscoverContext';
 
 // import { EmptyStateComponent } from '../components/EmptyStateComponent';
 
@@ -56,11 +49,7 @@ class TopicsPage extends Component {
   }
 
   renderAdditionalInfoExpandItems(item) {
-    return (
-      <React.Fragment key="extra">
-        {this.renderDescription(item)}
-      </React.Fragment>
-    );
+    return <React.Fragment key="extra">{this.renderDescription(item)}</React.Fragment>;
   }
 
   isFiltered = item => {
@@ -72,9 +61,7 @@ class TopicsPage extends Component {
       const lowerCurrentFilterValue = filter.value.toLowerCase();
       switch (filter.type) {
         case 'Name':
-          return !item.class_name
-            .toLowerCase()
-            .includes(lowerCurrentFilterValue);
+          return !item.class_name.toLowerCase().includes(lowerCurrentFilterValue);
         default:
           break;
       }
@@ -111,9 +98,7 @@ class TopicsPage extends Component {
                 <strong>Models using {item.class_name}:</strong>
                 <ul>
                   {item.messages.map(message => (
-                    <li key={`message-topic-${message}-${item.class_name}`}>
-                      {message}
-                    </li>
+                    <li key={`message-topic-${message}-${item.class_name}`}>{message}</li>
                   ))}
                 </ul>
               </Grid.Col>
@@ -210,32 +195,27 @@ class TopicsPage extends Component {
           />
           {this.conditionalFilter(topics)}
         </Filter>
-        {activeFilters &&
-          activeFilters.length > 0 && (
-            <Toolbar.Results>
-              <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
-              <Filter.List>
-                {activeFilters.map((item, index) => (
-                  <Filter.Item
-                    key={index}
-                    onRemove={this.removeFilter}
-                    filterData={item}
-                  >
-                    {item.text}
-                  </Filter.Item>
-                ))}
-              </Filter.List>
-              <Button
-                bsStyle="link"
-                onClick={e => {
-                  e.preventDefault();
-                  this.clearFilters();
-                }}
-              >
-                Clear All Filters
-              </Button>
-            </Toolbar.Results>
-          )}{' '}
+        {activeFilters && activeFilters.length > 0 && (
+          <Toolbar.Results>
+            <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
+            <Filter.List>
+              {activeFilters.map((item, index) => (
+                <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
+                  {item.text}
+                </Filter.Item>
+              ))}
+            </Filter.List>
+            <Button
+              bsStyle="link"
+              onClick={e => {
+                e.preventDefault();
+                this.clearFilters();
+              }}
+            >
+              Clear All Filters
+            </Button>
+          </Toolbar.Results>
+        )}{' '}
       </Toolbar>
     );
   };
@@ -252,11 +232,7 @@ class TopicsPage extends Component {
 }
 
 function TopicsPageWithContext() {
-  return (
-    <DiscoverContext.Consumer>
-      {context => <TopicsPage discover={context} />}
-    </DiscoverContext.Consumer>
-  );
+  return <DiscoverContext.Consumer>{context => <TopicsPage discover={context} />}</DiscoverContext.Consumer>;
 }
 
 export default TopicsPageWithContext;

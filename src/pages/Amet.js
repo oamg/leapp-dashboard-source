@@ -24,33 +24,21 @@ const AmetPage = () => (
       </Grid.Col>
     </Grid.Row>
     <ListView>
-      {expandableListItems.map(
-        (
-          {
-            icon,
-            title,
-            description,
-            properties,
-            actions,
-            expandedContentText
-          },
-          index
-        ) => (
-          <ListView.Item
-            key={index}
-            checkboxInput={<input type="checkbox" />}
-            leftContent={<ListView.Icon name={icon} />}
-            additionalInfo={renderAdditionalInfoItems(properties)}
-            actions={renderActions(rowActions, index)}
-            heading={title}
-            description={description}
-          >
-            <div className="row">
-              <div className="col-md-12">{expandedContentText}</div>
-            </div>
-          </ListView.Item>
-        )
-      )}
+      {expandableListItems.map(({ icon, title, description, properties, actions, expandedContentText }, index) => (
+        <ListView.Item
+          key={index}
+          checkboxInput={<input type="checkbox" />}
+          leftContent={<ListView.Icon name={icon} />}
+          additionalInfo={renderAdditionalInfoItems(properties)}
+          actions={renderActions(rowActions, index)}
+          heading={title}
+          description={description}
+        >
+          <div className="row">
+            <div className="col-md-12">{expandedContentText}</div>
+          </div>
+        </ListView.Item>
+      ))}
     </ListView>
   </Grid>
 );

@@ -25,9 +25,7 @@ export default class FormattedDocstring extends Component {
     return (
       <div>
         <h3>{this.title()}</h3>
-        <pre style={{ border: 'none', background: 'inherit', fontSize: '1em' }}>
-          {this.body()}
-        </pre>
+        <pre style={{ border: 'none', background: 'inherit', fontSize: '1em' }}>{this.body()}</pre>
       </div>
     );
   }

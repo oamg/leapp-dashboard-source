@@ -14,17 +14,13 @@ export const EmptyStateComponent = ({ title }) => (
         <EmptyState.Icon />
         <EmptyState.Title>Empty State Title</EmptyState.Title>
         <EmptyState.Info>
-          This is the Empty State component. The goal of a empty state pattern
-          is to provide a good first impression that helps users to achieve
-          their goals. It should be used when a view is empty because no objects
-          exists and you want to guide the user to perform specific actions.
+          This is the Empty State component. The goal of a empty state pattern is to provide a good first impression
+          that helps users to achieve their goals. It should be used when a view is empty because no objects exists and
+          you want to guide the user to perform specific actions.
         </EmptyState.Info>
         <EmptyState.Help onClick={() => {}}>
-          For more information please see the {` `}
-          <a
-            href="http://www.patternfly.org/pattern-library/communication/empty-state/"
-            onClick={() => {}}
-          >
+          For more information please see the
+          <a href="http://www.patternfly.org/pattern-library/communication/empty-state/" onClick={() => {}}>
             design documentation.
           </a>
         </EmptyState.Help>

@@ -307,9 +307,7 @@ class PaginatedTableView extends React.Component {
               index: 4
             },
             formatters: [
-              (value, { rowData }) => (
-                <span>{numeral(rowData.allocatedSize).format('0.00b')}</span>
-              ),
+              (value, { rowData }) => <span>{numeral(rowData.allocatedSize).format('0.00b')}</span>,
               Table.tableCellFormatter
             ]
           }
@@ -391,15 +389,8 @@ class PaginatedTableView extends React.Component {
 
     if (checked) {
       const selectableRows = currentRows.filter(r => !r.invalid && !r.conflict);
-      const updatedSelections = [
-        ...new Set([...selectableRows.map(r => r.id), ...selectedRows])
-      ];
-      const updatedRows = rows.map(
-        r =>
-          updatedSelections.indexOf(r.id) > -1
-            ? PaginatedTableView.selectRow(r)
-            : r
-      );
+      const updatedSelections = [...new Set([...selectableRows.map(r => r.id), ...selectedRows])];
+      const updatedRows = rows.map(r => (updatedSelections.indexOf(r.id) > -1 ? PaginatedTableView.selectRow(r) : r));
 
       this.setState({
         // important: you must update rows to force a re-render and trigger onRow hook
@@ -408,15 +399,8 @@ class PaginatedTableView extends React.Component {
       });
     } else {
       const ids = currentRows.map(r => r.id);
-      const updatedSelections = selectedRows.filter(
-        r => !(ids.indexOf(r) > -1)
-      );
-      const updatedRows = rows.map(
-        r =>
-          updatedSelections.indexOf(r.id) > -1
-            ? r
-            : PaginatedTableView.deselectRow(r)
-      );
+      const updatedSelections = selectedRows.filter(r => !(ids.indexOf(r) > -1));
+      const updatedRows = rows.map(r => (updatedSelections.indexOf(r.id) > -1 ? r : PaginatedTableView.deselectRow(r)));
 
       this.setState({
         rows: updatedRows,
@@ -467,12 +451,7 @@ class PaginatedTableView extends React.Component {
   };
   setPage = value => {
     const page = Number(value);
-    if (
-      !Number.isNaN(value) &&
-      value !== '' &&
-      page > 0 &&
-      page <= this.totalPages()
-    ) {
+    if (!Number.isNaN(value) && value !== '' && page > 0 && page <= this.totalPages()) {
       const newPaginationState = Object.assign({}, this.state.pagination);
       newPaginationState.page = page;
       this.setState({ pagination: newPaginationState, pageChangeValue: page });
@@ -510,10 +489,7 @@ class PaginatedTableView extends React.Component {
     filterText += ': ';
     filterText += value;
 
-    const activeFilters = [
-      ...this.state.activeFilters,
-      { label: filterText, field, value }
-    ];
+    const activeFilters = [...this.state.activeFilters, { label: filterText, field, value }];
 
     this.setState({ activeFilters });
   };
@@ -527,10 +503,7 @@ class PaginatedTableView extends React.Component {
 
     const index = activeFilters.indexOf(filter);
     if (index > -1) {
-      const updated = [
-        ...activeFilters.slice(0, index),
-        ...activeFilters.slice(index + 1)
-      ];
+      const updated = [...activeFilters.slice(0, index), ...activeFilters.slice(index + 1)];
       this.setState({ activeFilters: updated });
     }
   };
@@ -600,36 +573,30 @@ class PaginatedTableView extends React.Component {
                 onExit={this.onFindExit}
               />
             </Toolbar.RightContent>
-            {activeFilters &&
-              activeFilters.length > 0 && (
-                <Toolbar.Results>
-                  <h5>
-                    {filteredRows.length}{' '}
-                    {filteredRows.length === 1 ? 'Result' : 'Results'}
-                  </h5>
-                  <Filter.ActiveLabel>{'Active Filters'}:</Filter.ActiveLabel>
-                  <Filter.List>
-                    {activeFilters.map((item, index) => (
-                      <Filter.Item
-                        key={index}
-                        onRemove={this.removeFilter}
-                        filterData={item}
-                      >
-                        {item.label}
-                      </Filter.Item>
-                    ))}
-                  </Filter.List>
-                  <Button
-                    bsStyle="link"
-                    onClick={e => {
-                      e.preventDefault();
-                      this.clearFilters();
-                    }}
-                  >
-                    {'Clear All Filters'}
-                  </Button>
-                </Toolbar.Results>
-              )}
+            {activeFilters && activeFilters.length > 0 && (
+              <Toolbar.Results>
+                <h5>
+                  {filteredRows.length} {filteredRows.length === 1 ? 'Result' : 'Results'}
+                </h5>
+                <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
+                <Filter.List>
+                  {activeFilters.map((item, index) => (
+                    <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
+                      {item.label}
+                    </Filter.Item>
+                  ))}
+                </Filter.List>
+                <Button
+                  bsStyle="link"
+                  onClick={e => {
+                    e.preventDefault();
+                    this.clearFilters();
+                  }}
+                >
+                  Clear All Filters
+                </Button>
+              </Toolbar.Results>
+            )}
           </Toolbar>
         </Grid.Row>
         <br />
@@ -653,11 +620,7 @@ class PaginatedTableView extends React.Component {
           }}
         >
           <Table.Header headerRows={resolve.headerRows({ columns })} />
-          <Table.Body
-            rows={sortedPaginatedRows.rows || []}
-            rowKey="id"
-            onRow={this.onRow}
-          />
+          <Table.Body rows={sortedPaginatedRows.rows || []} rowKey="id" onRow={this.onRow} />
         </Table.PfProvider>
         <PaginationRow
           viewType={PAGINATION_VIEW.TABLE}

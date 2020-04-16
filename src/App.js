@@ -20,9 +20,9 @@ class App extends React.Component {
 
     this.menu = routes();
   }
-  handleNavClick = (event: Event) => {
+  handleNavClick = event => {
     event.preventDefault();
-    const target = (event.currentTarget: any);
+    const target = event.currentTarget;
     const { history } = this.props;
     if (target.getAttribute) {
       const href = target.getAttribute('href');
@@ -33,19 +33,10 @@ class App extends React.Component {
   renderContent = () => {
     const allRoutes = [];
     this.menu.map((item, index) => {
-      allRoutes.push(
-        <Route key={index} exact path={item.to} component={item.component} />
-      );
+      allRoutes.push(<Route key={index} exact path={item.to} component={item.component} />);
       if (item.subItems) {
         item.subItems.map((secondaryItem, subIndex) =>
-          allRoutes.push(
-            <Route
-              key={subIndex}
-              exact
-              path={secondaryItem.to}
-              component={secondaryItem.component}
-            />
-          )
+          allRoutes.push(<Route key={subIndex} exact path={secondaryItem.to} component={secondaryItem.component} />)
         );
       }
       return allRoutes;
@@ -70,9 +61,7 @@ class App extends React.Component {
     const { location } = this.props;
     const vertNavItems = this.menu.map(item => {
       const active = location.pathname === item.to;
-      const subItemActive =
-        item.subItems &&
-        item.subItems.some(item => location.pathname === item.to);
+      const subItemActive = item.subItems && item.subItems.some(subItem => location.pathname === subItem.to);
       return (
         <VerticalNavItem
           key={item.to}

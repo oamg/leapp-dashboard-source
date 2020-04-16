@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  Button,
-  Grid,
-  ListView,
-  Toolbar,
-  Filter,
-  TypeAheadSelect
-} from 'patternfly-react';
+import { Button, Grid, ListView, Toolbar, Filter, TypeAheadSelect } from 'patternfly-react';
 import DiscoverContext from '../DiscoverContext';
 
 // import { EmptyStateComponent } from '../components/EmptyStateComponent';
@@ -56,11 +49,7 @@ class WorkflowsPage extends Component {
   }
 
   renderAdditionalInfoExpandItems(item) {
-    return (
-      <React.Fragment key="extra">
-        {this.renderDescription(item)}
-      </React.Fragment>
-    );
+    return <React.Fragment key="extra">{this.renderDescription(item)}</React.Fragment>;
   }
 
   isFiltered = item => {
@@ -72,9 +61,7 @@ class WorkflowsPage extends Component {
       const lowerCurrentFilterValue = filter.value.toLowerCase();
       switch (filter.type) {
         case 'Name':
-          return !item.class_name
-            .toLowerCase()
-            .includes(lowerCurrentFilterValue);
+          return !item.class_name.toLowerCase().includes(lowerCurrentFilterValue);
         default:
           break;
       }
@@ -122,10 +109,7 @@ class WorkflowsPage extends Component {
                           additionalInfo={[
                             <ListView.InfoItem key="details">
                               <ListView.Expand
-                                expanded={
-                                  phase.expanded &&
-                                  phase.expandType === 'details'
-                                }
+                                expanded={phase.expanded && phase.expandType === 'details'}
                                 toggleExpanded={() => {
                                   this.toggleExpand(phase, 'details');
                                 }}
@@ -145,15 +129,10 @@ class WorkflowsPage extends Component {
                             {actors
                               .filter(
                                 actor =>
-                                  actor.tags.indexOf(phase.filter.phase) !==
-                                    -1 && actor.tags.indexOf(item.tag) !== -1
+                                  actor.tags.indexOf(phase.filter.phase) !== -1 && actor.tags.indexOf(item.tag) !== -1
                               )
                               .map(actor => (
-                                <li
-                                  key={`workflows-phase-${phase.class_name}-${
-                                    actor.class_name
-                                  }`}
-                                >
+                                <li key={`workflows-phase-${phase.class_name}-${actor.class_name}`}>
                                   {actor.class_name}
                                 </li>
                               ))}
@@ -257,32 +236,27 @@ class WorkflowsPage extends Component {
           />
           {this.conditionalFilter(workflows)}
         </Filter>
-        {activeFilters &&
-          activeFilters.length > 0 && (
-            <Toolbar.Results>
-              <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
-              <Filter.List>
-                {activeFilters.map((item, index) => (
-                  <Filter.Item
-                    key={index}
-                    onRemove={this.removeFilter}
-                    filterData={item}
-                  >
-                    {item.text}
-                  </Filter.Item>
-                ))}
-              </Filter.List>
-              <Button
-                bsStyle="link"
-                onClick={e => {
-                  e.preventDefault();
-                  this.clearFilters();
-                }}
-              >
-                Clear All Filters
-              </Button>
-            </Toolbar.Results>
-          )}{' '}
+        {activeFilters && activeFilters.length > 0 && (
+          <Toolbar.Results>
+            <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
+            <Filter.List>
+              {activeFilters.map((item, index) => (
+                <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
+                  {item.text}
+                </Filter.Item>
+              ))}
+            </Filter.List>
+            <Button
+              bsStyle="link"
+              onClick={e => {
+                e.preventDefault();
+                this.clearFilters();
+              }}
+            >
+              Clear All Filters
+            </Button>
+          </Toolbar.Results>
+        )}{' '}
       </Toolbar>
     );
   };
@@ -300,11 +274,7 @@ class WorkflowsPage extends Component {
 }
 
 function WorkflowsPageWithContext() {
-  return (
-    <DiscoverContext.Consumer>
-      {context => <WorkflowsPage discover={context} />}
-    </DiscoverContext.Consumer>
-  );
+  return <DiscoverContext.Consumer>{context => <WorkflowsPage discover={context} />}</DiscoverContext.Consumer>;
 }
 
 export default WorkflowsPageWithContext;

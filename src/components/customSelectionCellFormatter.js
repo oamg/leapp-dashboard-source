@@ -2,12 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { noop, Table } from 'patternfly-react';
 
-const customSelectionCellFormatter = (
-  { rowData, rowIndex },
-  onSelectRow,
-  id,
-  label
-) => {
+const customSelectionCellFormatter = ({ rowData, rowIndex }, onSelectRow, id, label) => {
   const disabled = rowData.invalid;
   const checkboxId = id || `select${rowIndex}`;
   const checkboxLabel = label || `Select row ${rowIndex}`;

@@ -1,4 +1,4 @@
-import Dolor from './pages/Dolor';
+// import Dolor from './pages/Dolor';
 import Actors from './pages/Actors';
 import Models from './pages/Models';
 import Tags from './pages/Tags';
@@ -57,7 +57,7 @@ const routes = () => [
     title: 'Workflows',
     to: '/workflows',
     component: Workflows
-  }/*,
+  } /* ,
   {
     iconClass: 'fa fa-comments',
     title: 'Messages',
@@ -69,7 +69,7 @@ const routes = () => [
     title: 'Logs',
     to: '/logs',
     component: Dolor
-  }*/
+  } */
 ];
 
 export { baseName, routes };

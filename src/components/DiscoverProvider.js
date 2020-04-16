@@ -6,10 +6,7 @@ import DiscoverContext from '../DiscoverContext';
 
 class DiscoverProvider extends React.Component {
   static propTypes = {
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node
-    ]).isRequired
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired
   };
   state = {
     discover: []
@@ -34,11 +31,7 @@ class DiscoverProvider extends React.Component {
 
   render() {
     const { discover } = this.state;
-    return (
-      <DiscoverContext.Provider value={discover}>
-        {this.props.children}
-      </DiscoverContext.Provider>
-    );
+    return <DiscoverContext.Provider value={discover}>{this.props.children}</DiscoverContext.Provider>;
   }
 }
 

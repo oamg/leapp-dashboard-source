@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  Button,
-  Grid,
-  ListView,
-  Toolbar,
-  Filter,
-  TypeAheadSelect
-} from 'patternfly-react';
+import { Button, Grid, ListView, Toolbar, Filter, TypeAheadSelect } from 'patternfly-react';
 import DiscoverContext from '../DiscoverContext';
 
 // import { EmptyStateComponent } from '../components/EmptyStateComponent';
@@ -55,11 +48,7 @@ class TagsPage extends Component {
   }
 
   renderAdditionalInfoExpandItems(item) {
-    return (
-      <React.Fragment key="extra">
-        {this.renderDescription(item)}
-      </React.Fragment>
-    );
+    return <React.Fragment key="extra">{this.renderDescription(item)}</React.Fragment>;
   }
 
   isFiltered = item => {
@@ -71,9 +60,7 @@ class TagsPage extends Component {
       const lowerCurrentFilterValue = filter.value.toLowerCase();
       switch (filter.type) {
         case 'Name':
-          return !item.class_name
-            .toLowerCase()
-            .includes(lowerCurrentFilterValue);
+          return !item.class_name.toLowerCase().includes(lowerCurrentFilterValue);
         default:
           break;
       }
@@ -110,9 +97,7 @@ class TagsPage extends Component {
                 <strong>Actors using {item.class_name}:</strong>
                 <ul>
                   {item.actors.map(actor => (
-                    <li key={`phase-tag-${actor}-${item.class_name}`}>
-                      {actor}
-                    </li>
+                    <li key={`phase-tag-${actor}-${item.class_name}`}>{actor}</li>
                   ))}
                 </ul>
               </Grid.Col>
@@ -209,32 +194,27 @@ class TagsPage extends Component {
           />
           {this.conditionalFilter(tags)}
         </Filter>
-        {activeFilters &&
-          activeFilters.length > 0 && (
-            <Toolbar.Results>
-              <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
-              <Filter.List>
-                {activeFilters.map((item, index) => (
-                  <Filter.Item
-                    key={index}
-                    onRemove={this.removeFilter}
-                    filterData={item}
-                  >
-                    {item.text}
-                  </Filter.Item>
-                ))}
-              </Filter.List>
-              <Button
-                bsStyle="link"
-                onClick={e => {
-                  e.preventDefault();
-                  this.clearFilters();
-                }}
-              >
-                Clear All Filters
-              </Button>
-            </Toolbar.Results>
-          )}{' '}
+        {activeFilters && activeFilters.length > 0 && (
+          <Toolbar.Results>
+            <Filter.ActiveLabel>Active Filters:</Filter.ActiveLabel>
+            <Filter.List>
+              {activeFilters.map((item, index) => (
+                <Filter.Item key={index} onRemove={this.removeFilter} filterData={item}>
+                  {item.text}
+                </Filter.Item>
+              ))}
+            </Filter.List>
+            <Button
+              bsStyle="link"
+              onClick={e => {
+                e.preventDefault();
+                this.clearFilters();
+              }}
+            >
+              Clear All Filters
+            </Button>
+          </Toolbar.Results>
+        )}{' '}
       </Toolbar>
     );
   };
@@ -251,11 +231,7 @@ class TagsPage extends Component {
 }
 
 function TagsPageWithContext() {
-  return (
-    <DiscoverContext.Consumer>
-      {context => <TagsPage discover={context} />}
-    </DiscoverContext.Consumer>
-  );
+  return <DiscoverContext.Consumer>{context => <TagsPage discover={context} />}</DiscoverContext.Consumer>;
 }
 
 export default TagsPageWithContext;
