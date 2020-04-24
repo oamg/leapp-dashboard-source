@@ -268,7 +268,7 @@ class ModelsPage extends Component {
   render() {
     const allModels = this.props.discover
       .map(repo => repo.models)
-      .concat([{ class_name: 'Report' }])
+      .concat([{ class_name: 'Report' }, { class_name: 'DialogModel' }])
       .flat();
     const actors = this.props.discover.map(repo => repo.actors).flat();
     // eslint-disable-next-line prefer-const
