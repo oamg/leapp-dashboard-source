@@ -97,7 +97,11 @@ class TagsPage extends Component {
                 <strong>Actors using {item.class_name}:</strong>
                 <ul>
                   {item.actors.map(actor => (
-                    <li key={`phase-tag-${actor}-${item.class_name}`}>{actor}</li>
+                    <li key={`phase-tag-${actor}-${item.class_name}`}>
+                      <Button bsStyle="link" href={`/#/?${actor}`}>
+                        {actor}
+                      </Button>
+                    </li>
                   ))}
                 </ul>
               </Grid.Col>
@@ -166,6 +170,7 @@ class TagsPage extends Component {
     const { currentFilterType, currentFilterValue } = this.state;
     return (
       <TypeAheadSelect
+        id="tags-select"
         options={this.getOptions(tags)}
         type={currentFilterType}
         allowNew

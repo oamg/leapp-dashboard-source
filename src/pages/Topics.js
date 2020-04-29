@@ -98,7 +98,11 @@ class TopicsPage extends Component {
                 <strong>Models using {item.class_name}:</strong>
                 <ul>
                   {item.messages.map(message => (
-                    <li key={`message-topic-${message}-${item.class_name}`}>{message}</li>
+                    <li key={`message-topic-${message}-${item.class_name}`}>
+                      <Button bsStyle="link" href={`/#/models?${message}`}>
+                        {message}
+                      </Button>
+                    </li>
                   ))}
                 </ul>
               </Grid.Col>
@@ -167,6 +171,7 @@ class TopicsPage extends Component {
     const { currentFilterType, currentFilterValue } = this.state;
     return (
       <TypeAheadSelect
+        id="topics-select"
         options={this.getOptions(topics)}
         type={currentFilterType}
         allowNew

@@ -1,21 +1,57 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { Button, Grid, ListView, Toolbar, Filter, TypeAheadSelect } from 'patternfly-react';
 import DiscoverContext from '../DiscoverContext';
 
-// import { EmptyStateComponent } from '../components/EmptyStateComponent';
 import FormattedDocstring from '../components/FormattedDocstring';
 
 class ActorsPage extends Component {
   static propTypes = {
-    discover: PropTypes.array.isRequired
+    discover: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired
   };
   state = {
     currentFilterType: 'Name',
     currentFilterValue: '',
-    activeFilters: []
+    activeFilters: [],
+    refs: {},
+    currentItem: ''
   };
+
+  static getDerivedStateFromProps(props, state) {
+    const actors = props.discover.map(repo => repo.actors).flat();
+    let updated = false;
+    const refs = actors.reduce((store, a) => {
+      if (!store[a.class_name]) {
+        store[a.class_name] = React.createRef();
+        updated = true;
+      }
+      return store;
+    }, state.refs || {});
+    if (updated) {
+      return { refs };
+    }
+    return null;
+  }
+
+  scrollToElement = () => {
+    const { refs } = this.state;
+    const currentItem = this.props.history.location.search.replace(/\?/g, '');
+    if (currentItem !== this.state.currentItem && refs[currentItem] && refs[currentItem].current) {
+      refs[currentItem].current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.setState({ currentItem });
+    }
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    this.scrollToElement();
+  }
+
+  componentDidMount() {
+    this.scrollToElement();
+  }
 
   toggleExpand = (item, expandProp) => {
     if (expandProp === item.expandType) {
@@ -115,7 +151,11 @@ class ActorsPage extends Component {
             <strong>Consumes</strong>
             <ul>
               {item.consumes.map(e => (
-                <li key={`consumed-${e}`}>{e}</li>
+                <li key={`consumed-${e}`}>
+                  <Button bsStyle="link" href={`/#/models?${e}`}>
+                    {e}
+                  </Button>
+                </li>
               ))}
             </ul>
           </Grid.Col>
@@ -123,7 +163,11 @@ class ActorsPage extends Component {
             <strong>Produces</strong>
             <ul>
               {item.produces.map(e => (
-                <li key={`produced-${e}`}>{e}</li>
+                <li key={`produced-${e}`}>
+                  <Button bsStyle="link" href={`/#/models?${e}`}>
+                    {e}
+                  </Button>
+                </li>
               ))}
             </ul>
           </Grid.Col>
@@ -139,24 +183,25 @@ class ActorsPage extends Component {
     function renderActions() {
       return <div />;
     }
-
+    const style = this.state.currentItem === item.class_name ? { border: '1px solid #0088ce' } : {};
     return (
-      <ListView.Item
-        key={index}
-        actions={renderActions()}
-        leftContent={<ListView.Icon name="star" />}
-        additionalInfo={[this.renderAdditionalInfoExpandItems(item)]}
-        heading={item.class_name}
-        // description={item.description}
-        stacked
-        compoundExpand
-        compoundExpanded={item.expanded}
-        onCloseCompoundExpand={() => this.closeExpand(item)}
-      >
-        <Grid.Row>
-          <Grid.Col sm={11}>{expandText()}</Grid.Col>
-        </Grid.Row>
-      </ListView.Item>
+      <div key={index} ref={this.state.refs[item.class_name]} style={style}>
+        <ListView.Item
+          actions={renderActions()}
+          leftContent={<ListView.Icon name="star" />}
+          additionalInfo={[this.renderAdditionalInfoExpandItems(item)]}
+          heading={item.class_name}
+          // description={item.description}
+          stacked
+          compoundExpand
+          compoundExpanded={item.expanded}
+          onCloseCompoundExpand={() => this.closeExpand(item)}
+        >
+          <Grid.Row>
+            <Grid.Col sm={11}>{expandText()}</Grid.Col>
+          </Grid.Row>
+        </ListView.Item>
+      </div>
     );
   };
 
@@ -224,7 +269,6 @@ class ActorsPage extends Component {
 
   render() {
     const actors = this.props.discover.map(repo => repo.actors).flat();
-
     const { activeFilters, currentFilterType, currentFilterValue } = this.state;
     return (
       <Grid fluid className="container-pf-nav-pf-vertical">
@@ -238,6 +282,7 @@ class ActorsPage extends Component {
               }}
             />
             <TypeAheadSelect
+              id="actors-search"
               options={this.getOptions(actors)}
               type={currentFilterType}
               allowNew
@@ -275,8 +320,10 @@ class ActorsPage extends Component {
   }
 }
 
+const ActorsPageWithRouter = withRouter(ActorsPage);
+
 function ActorsPageWithContext() {
-  return <DiscoverContext.Consumer>{context => <ActorsPage discover={context} />}</DiscoverContext.Consumer>;
+  return <DiscoverContext.Consumer>{context => <ActorsPageWithRouter discover={context} />}</DiscoverContext.Consumer>;
 }
 
 export default ActorsPageWithContext;

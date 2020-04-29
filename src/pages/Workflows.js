@@ -133,7 +133,9 @@ class WorkflowsPage extends Component {
                               )
                               .map(actor => (
                                 <li key={`workflows-phase-${phase.class_name}-${actor.class_name}`}>
-                                  {actor.class_name}
+                                  <Button bsStyle="link" href={`/#/?${actor.class_name}`}>
+                                    {actor.class_name}
+                                  </Button>
                                 </li>
                               ))}
                           </ul>
@@ -208,6 +210,7 @@ class WorkflowsPage extends Component {
     const { currentFilterType, currentFilterValue } = this.state;
     return (
       <TypeAheadSelect
+        id="workflow-select"
         options={this.getOptions(workflows)}
         type={currentFilterType}
         allowNew

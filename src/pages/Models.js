@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { Button, Grid, ListView, Toolbar, Filter, TypeAheadSelect, Form } from 'patternfly-react';
@@ -7,14 +8,50 @@ import DiscoverContext from '../DiscoverContext';
 
 class ModelsPage extends Component {
   static propTypes = {
-    discover: PropTypes.array.isRequired
+    discover: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired
   };
 
   state = {
     currentFilterType: 'Name',
     currentFilterValue: '',
-    activeFilters: []
+    activeFilters: [],
+    refs: {},
+    currentItem: ''
   };
+
+  static getDerivedStateFromProps(props, state) {
+    const models = props.discover.map(repo => repo.models).flat();
+    let updated = false;
+    const refs = models.reduce((store, a) => {
+      if (!store[a.class_name]) {
+        store[a.class_name] = React.createRef();
+        updated = true;
+      }
+      return store;
+    }, state.refs || {});
+    if (updated) {
+      return { refs };
+    }
+    return null;
+  }
+
+  scrollToElement = () => {
+    const { refs } = this.state;
+    const currentItem = this.props.history.location.search.replace(/\?/g, '');
+    if (currentItem !== this.state.currentItem && refs[currentItem] && refs[currentItem].current) {
+      refs[currentItem].current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.setState({ currentItem });
+    }
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    this.scrollToElement();
+  }
+
+  componentDidMount() {
+    this.scrollToElement();
+  }
 
   toggleExpand = (item, expandProp) => {
     if (expandProp === item.expandType) {
@@ -84,46 +121,62 @@ class ModelsPage extends Component {
       return <div />;
     }
 
+    const style = this.state.currentItem === item.class_name ? { border: '1px solid #0088ce' } : {};
     return (
-      <ListView.Item
-        key={index}
-        actions={renderActions()}
-        leftContent={<ListView.Icon name="star" />}
-        additionalInfo={[this.renderAdditionalInfoExpandItems(item)]}
-        heading={item.class_name}
-        // description={item.description}
-        stacked
-        compoundExpand
-        compoundExpanded={item.expanded}
-        onCloseCompoundExpand={() => this.closeExpand(item)}
-      >
-        <Grid.Row>
-          <Grid.Col sm={11}>
-            <Grid.Row>
-              <Grid.Col sm={6}>
-                <strong>Consumed by</strong>
-                <ul>
-                  {item.actors.map(actor =>
-                    actor.consumes
-                      .filter(e => item.class_name === e)
-                      .map(e => <li key={`produced-${actor.class_name}-${e}`}>{actor.class_name}</li>)
-                  )}
-                </ul>
-              </Grid.Col>
-              <Grid.Col sm={6}>
-                <strong>Produced by</strong>
-                <ul>
-                  {item.actors.map(actor =>
-                    actor.produces
-                      .filter(e => item.class_name === e)
-                      .map(e => <li key={`produced-${actor.class_name}-${e}`}>{actor.class_name}</li>)
-                  )}
-                </ul>
-              </Grid.Col>
-            </Grid.Row>
-          </Grid.Col>
-        </Grid.Row>
-      </ListView.Item>
+      <div key={index} ref={this.state.refs[item.class_name]} style={style}>
+        <ListView.Item
+          key={index}
+          actions={renderActions()}
+          leftContent={<ListView.Icon name="star" />}
+          additionalInfo={[this.renderAdditionalInfoExpandItems(item)]}
+          heading={item.class_name}
+          // description={item.description}
+          stacked
+          compoundExpand
+          compoundExpanded={item.expanded}
+          onCloseCompoundExpand={() => this.closeExpand(item)}
+        >
+          <Grid.Row>
+            <Grid.Col sm={11}>
+              <Grid.Row>
+                <Grid.Col sm={6}>
+                  <strong>Consumed by</strong>
+                  <ul>
+                    {item.actors.map(actor =>
+                      actor.consumes
+                        .filter(e => item.class_name === e)
+                        .map(e => (
+                          <li key={`consumed-${actor.class_name}-${e}`}>
+                            {' '}
+                            <Button bsStyle="link" href={`/#/?${actor.class_name}`}>
+                              {actor.class_name}
+                            </Button>
+                          </li>
+                        ))
+                    )}
+                  </ul>
+                </Grid.Col>
+                <Grid.Col sm={6}>
+                  <strong>Produced by</strong>
+                  <ul>
+                    {item.actors.map(actor =>
+                      actor.produces
+                        .filter(e => item.class_name === e)
+                        .map(e => (
+                          <li key={`produced-${actor.class_name}-${e}`}>
+                            <Button bsStyle="link" href={`/#/?${actor.class_name}`}>
+                              {actor.class_name}
+                            </Button>
+                          </li>
+                        ))
+                    )}
+                  </ul>
+                </Grid.Col>
+              </Grid.Row>
+            </Grid.Col>
+          </Grid.Row>
+        </ListView.Item>
+      </div>
     );
   };
 
@@ -212,6 +265,7 @@ class ModelsPage extends Component {
     }
     return (
       <TypeAheadSelect
+        id="woot"
         options={this.getOptions(models)}
         type={currentFilterType}
         allowNew
@@ -290,8 +344,12 @@ class ModelsPage extends Component {
   }
 }
 
+const ModelsPageWithRouterContext = withRouter(ModelsPage);
+
 function ModelsPageWithContext() {
-  return <DiscoverContext.Consumer>{context => <ModelsPage discover={context} />}</DiscoverContext.Consumer>;
+  return (
+    <DiscoverContext.Consumer>{context => <ModelsPageWithRouterContext discover={context} />}</DiscoverContext.Consumer>
+  );
 }
 
 export default ModelsPageWithContext;
