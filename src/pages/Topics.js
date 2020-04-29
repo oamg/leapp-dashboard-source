@@ -99,7 +99,7 @@ class TopicsPage extends Component {
                 <ul>
                   {item.messages.map(message => (
                     <li key={`message-topic-${message}-${item.class_name}`}>
-                      <Button bsStyle="link" href={`/#/models?${message}`}>
+                      <Button bsStyle="link" href={`#/models?${message}`}>
                         {message}
                       </Button>
                     </li>

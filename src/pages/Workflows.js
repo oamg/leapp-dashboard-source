@@ -133,7 +133,7 @@ class WorkflowsPage extends Component {
                               )
                               .map(actor => (
                                 <li key={`workflows-phase-${phase.class_name}-${actor.class_name}`}>
-                                  <Button bsStyle="link" href={`/#/?${actor.class_name}`}>
+                                  <Button bsStyle="link" href={`#/?${actor.class_name}`}>
                                     {actor.class_name}
                                   </Button>
                                 </li>

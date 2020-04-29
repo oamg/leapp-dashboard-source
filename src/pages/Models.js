@@ -148,7 +148,7 @@ class ModelsPage extends Component {
                         .map(e => (
                           <li key={`consumed-${actor.class_name}-${e}`}>
                             {' '}
-                            <Button bsStyle="link" href={`/#/?${actor.class_name}`}>
+                            <Button bsStyle="link" href={`#/?${actor.class_name}`}>
                               {actor.class_name}
                             </Button>
                           </li>
@@ -164,7 +164,7 @@ class ModelsPage extends Component {
                         .filter(e => item.class_name === e)
                         .map(e => (
                           <li key={`produced-${actor.class_name}-${e}`}>
-                            <Button bsStyle="link" href={`/#/?${actor.class_name}`}>
+                            <Button bsStyle="link" href={`#/?${actor.class_name}`}>
                               {actor.class_name}
                             </Button>
                           </li>

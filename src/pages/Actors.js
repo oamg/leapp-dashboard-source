@@ -152,7 +152,7 @@ class ActorsPage extends Component {
             <ul>
               {item.consumes.map(e => (
                 <li key={`consumed-${e}`}>
-                  <Button bsStyle="link" href={`/#/models?${e}`}>
+                  <Button bsStyle="link" href={`#/models?${e}`}>
                     {e}
                   </Button>
                 </li>
@@ -164,7 +164,7 @@ class ActorsPage extends Component {
             <ul>
               {item.produces.map(e => (
                 <li key={`produced-${e}`}>
-                  <Button bsStyle="link" href={`/#/models?${e}`}>
+                  <Button bsStyle="link" href={`#/models?${e}`}>
                     {e}
                   </Button>
                 </li>

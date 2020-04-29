@@ -98,7 +98,7 @@ class TagsPage extends Component {
                 <ul>
                   {item.actors.map(actor => (
                     <li key={`phase-tag-${actor}-${item.class_name}`}>
-                      <Button bsStyle="link" href={`/#/?${actor}`}>
+                      <Button bsStyle="link" href={`#/?${actor}`}>
                         {actor}
                       </Button>
                     </li>
