@@ -139,6 +139,15 @@ class ModelsPage extends Component {
           <Grid.Row>
             <Grid.Col sm={11}>
               <Grid.Row>
+                { item.description ? 
+                <Grid.Col sm={12}>
+                  <strong>Description:</strong>
+                  <pre>
+                    {item.description || 'No description has been provided for this actor.'}
+                  </pre>
+                </Grid.Col>: <div/>}
+              </Grid.Row> 
+              <Grid.Row>
                 <Grid.Col sm={6}>
                   <strong>Consumed by</strong>
                   <ul>
@@ -173,6 +182,18 @@ class ModelsPage extends Component {
                   </ul>
                 </Grid.Col>
               </Grid.Row>
+              <Grid.Row>
+                <Grid.Col sm={6}>
+                  <strong>Fields</strong>
+                  <ul>
+                    {Object.entries(item.fields || {}).map(([name, field]) => 
+                      <li key={`model-${item.class_name}-field-${name}`}>{name} <i>[{field.class_name}]</i></li>
+                    )}
+                  </ul>
+                </Grid.Col>
+                <Grid.Col sm={6}>
+                </Grid.Col>
+              </Grid.Row>                      
             </Grid.Col>
           </Grid.Row>
         </ListView.Item>
